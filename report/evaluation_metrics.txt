@@ -1,0 +1,22 @@
+DL-024 EVALUATION METRICS ON REAL DATA TEST SPLIT
+============================================================
+
+              precision    recall  f1-score   support
+
+       Hello     1.0000    1.0000    1.0000        42
+   Thank_You     1.0000    1.0000    1.0000        42
+         Yes     1.0000    1.0000    1.0000        42
+          No     1.0000    1.0000    1.0000        42
+        Help     1.0000    1.0000    1.0000        42
+
+    accuracy                         1.0000       210
+   macro avg     1.0000    1.0000    1.0000       210
+weighted avg     1.0000    1.0000    1.0000       210
+
+
+Confusion Matrix:
+[[42  0  0  0  0]
+ [ 0 42  0  0  0]
+ [ 0  0 42  0  0]
+ [ 0  0  0 42  0]
+ [ 0  0  0  0 42]]
