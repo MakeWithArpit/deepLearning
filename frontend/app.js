@@ -3,7 +3,10 @@
  * Matches Stitch Academic Instrumentation Design Reference
  */
 
-const API_BASE = "http://localhost:8005";
+// Use 127.0.0.1 on local machines to avoid Windows IPv6 localhost timeout with Docker
+const API_BASE = (!window.location.hostname || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  ? "http://127.0.0.1:8005"
+  : `http://${window.location.hostname}:8005`;
 
 // DOM References
 const dropzoneArea = document.getElementById("dropzone-area");
