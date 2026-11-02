@@ -1,11 +1,6 @@
-/* ─────────────────────────────────────────────────────────────
-   DL-024 Academic Gesture Recognition Benchmark Design System
-   Exact Reference: Stitch Research Prototype (Functional Modernism)
-   Palette: Laboratory Light Canvas with High-Trust Cobalt/Navy
-   ───────────────────────────────────────────────────────────── */
+
 
 :root {
-  /* Surface & Canvas System */
   --color-surface: #f9f9ff;
   --color-surface-dim: #d1daf4;
   --color-surface-lowest: #ffffff;
