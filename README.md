@@ -186,7 +186,7 @@ source venv/Scripts/activate
 **Step 2 — Install backend dependencies:**
 
 ```cmd
-python -m pip install --upgrade pip
+py -3.12 -m pip install --upgrade pip
 pip install -r backend/requirements.txt
 ```
 
