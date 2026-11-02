@@ -179,7 +179,7 @@ docker compose down
 To prevent dependency conflicts with existing Python packages, always use a dedicated virtual environment:
 
 ```cmd
-python -m venv venv
+py -3.12 -m venv venv
 source venv\Scripts\activate
 ```
 
