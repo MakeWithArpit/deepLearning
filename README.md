@@ -85,6 +85,17 @@ Visual confusion matrix and training curves are stored under the [`report/`](rep
 
 ---
 
+## Prerequisites
+
+### For Docker Method
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+
+### For Local Python Method
+- Python 3.10 or higher
+- pip
+
+---
+
 ## Repository Structure
 
 ```text
@@ -122,35 +133,76 @@ deepLearning/
 
 ---
 
-## Quickstart & Execution
+## Quickstart — New User Setup
 
-### Option 1: Docker (Recommended)
-
-Run both frontend and backend services with a single command:
+### Step 1: Clone the Repository
 
 ```bash
-docker-compose up -d --build
+git clone https://github.com/MakeWithArpit/deepLearning.git
+cd deepLearning
 ```
 
-* **Frontend UI:** [http://localhost:3000](http://localhost:3000)
-* **Backend API Documentation:** [http://localhost:8005/docs](http://localhost:8005/docs)
-* **Health Check Endpoint:** `GET http://localhost:8005/health`
+---
 
-### Option 2: Local Python Execution
+### Option A: Run with Docker (Recommended)
 
-1. **Install Dependencies:**
-   ```bash
-   pip install -r backend/requirements.txt
-   ```
+> Requires Docker Desktop to be installed and running.
 
-2. **Run Backend Service:**
-   ```bash
-   cd backend
-   uvicorn main:app --host 0.0.0.0 --port 8005 --reload
-   ```
+```bash
+docker compose up --build
+```
 
-3. **Open Frontend:**
-   Open `frontend/index.html` in any web browser.
+First build takes ~10–15 minutes (downloads TensorFlow + MediaPipe).
+Subsequent runs start in under 30 seconds.
+
+| Service | URL |
+|---|---|
+| Frontend UI | http://localhost:3000 |
+| Backend API | http://localhost:8005 |
+| API Docs (Swagger) | http://localhost:8005/docs |
+| Health Check | http://localhost:8005/health |
+
+To stop:
+```bash
+docker compose down
+```
+
+---
+
+### Option B: Run without Docker (Local Python)
+
+> Requires Python 3.10+
+
+**Step 1 — Install backend dependencies:**
+```bash
+pip install -r backend/requirements.txt
+```
+
+> First install takes ~5–10 minutes (TensorFlow + MediaPipe are large packages).
+
+**Step 2 — Start the backend server:**
+
+On Windows:
+```bash
+set PYTHONPATH=.;ml/src
+uvicorn backend.main:app --host 0.0.0.0 --port 8005
+```
+
+On macOS / Linux:
+```bash
+PYTHONPATH=.:ml/src uvicorn backend.main:app --host 0.0.0.0 --port 8005
+```
+
+**Step 3 — Open the frontend:**
+
+Open `frontend/index.html` directly in your browser, **or** serve it with Python:
+```bash
+cd frontend
+python -m http.server 3000
+```
+Then open [http://localhost:3000](http://localhost:3000).
+
+> Backend must be running on port 8005 before using the frontend.
 
 ---
 
