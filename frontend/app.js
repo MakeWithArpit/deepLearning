@@ -147,7 +147,6 @@ function resetStudio() {
   replaceFileBtn.disabled = true;
   analyzeBtn.disabled = true;
   analyzeBtn.innerHTML = '<span class="material-symbols-outlined btn-icon">play_arrow</span> Run Inference';
-  analyzeBtn.innerHTML = '<span class="material-symbols-outlined btn-icon">hourglass_empty</span> Processing...';
 
   progressContainer.style.display = "none";
   resultsWrapper.style.display = "none";
