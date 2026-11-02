@@ -111,3 +111,10 @@ async def predict(file: UploadFile = File(...)):
     scores = {c: (round(conf, 2) if c == label else other) for c in CLASSES}
 
     return PredictResponse(gesture=label, confidence=round(conf, 2), all_scores=scores)
+
+
+# Serve frontend static files (used on HF Spaces — single container mode)
+from fastapi.staticfiles import StaticFiles
+_frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
+if os.path.exists(_frontend_dir):
+    app.mount("/", StaticFiles(directory=_frontend_dir, html=True), name="static")

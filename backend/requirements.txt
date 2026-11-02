@@ -7,4 +7,5 @@ tensorflow==2.17.0
 opencv-python-headless==4.10.0.84
 numpy==1.26.4
 scikit-learn==1.5.2
+aiofiles==23.2.1
 
