@@ -195,7 +195,6 @@ pip install -r backend/requirements.txt
 **Step 3 — Start the backend server:**
 
 ```cmd
-set PYTHONPATH=.;ml/src
 uvicorn backend.main:app --host 127.0.0.1 --port 8005
 ```
 
