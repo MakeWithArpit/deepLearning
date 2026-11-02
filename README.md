@@ -180,7 +180,7 @@ To prevent dependency conflicts with existing Python packages, always use a dedi
 
 ```cmd
 python -m venv venv
-venv\Scripts\activate
+source venv\Scripts\activate
 ```
 
 **Step 2 — Install backend dependencies:**
