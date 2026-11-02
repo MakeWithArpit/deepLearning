@@ -23,13 +23,13 @@ An accessibility deep learning research prototype designed to classify short vid
 
 The system classifies 5 dynamic hand gestures represented across temporal sequences of 20 frames:
 
-| ID | Class Label | Motion Characteristics | Real-World Meaning |
-|---|---|---|---|
-| **01** | `Hello` | Lateral open-palm oscillation | Friendly greeting wave |
-| **02** | `Thank_You` | Forward push / translation from body | Expression of gratitude |
-| **03** | `Yes` | Vertical nodding fist motion | Affirmation / Agreement |
-| **04** | `No` | Index finger & thumb pinch oscillation | Negation / Disagreement |
-| **05** | `Help` | Two-hand upward support lifting motion | Assistance request |
+| ID           | Class Label   | Motion Characteristics                 | Real-World Meaning      |
+| ------------ | ------------- | -------------------------------------- | ----------------------- |
+| **01** | `Hello`     | Lateral open-palm oscillation          | Friendly greeting wave  |
+| **02** | `Thank_You` | Forward push / translation from body   | Expression of gratitude |
+| **03** | `Yes`       | Vertical nodding fist motion           | Affirmation / Agreement |
+| **04** | `No`        | Index finger & thumb pinch oscillation | Negation / Disagreement |
+| **05** | `Help`      | Two-hand upward support lifting motion | Assistance request      |
 
 ---
 
@@ -91,7 +91,7 @@ Visual confusion matrix and training curves are stored under the [`report/`](rep
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 
 ### For Local Python Method
-- Python 3.10 or higher
+- Python 3.10, 3.11, or 3.12 (TensorFlow 2.17 does not support Python 3.13+)
 - pip
 
 ---
@@ -155,14 +155,15 @@ docker compose up --build
 First build takes ~10–15 minutes (downloads TensorFlow + MediaPipe).
 Subsequent runs start in under 30 seconds.
 
-| Service | URL |
-|---|---|
-| Frontend UI | http://localhost:3000 |
-| Backend API | http://localhost:8005 |
-| API Docs (Swagger) | http://localhost:8005/docs |
-| Health Check | http://localhost:8005/health |
+| Service            | URL                          |
+| ------------------ | ---------------------------- |
+| Frontend UI        | http://localhost:3000        |
+| Backend API        | http://localhost:8005        |
+| API Docs (Swagger) | http://localhost:8005/docs   |
+| Health Check       | http://localhost:8005/health |
 
 To stop:
+
 ```bash
 docker compose down
 ```
@@ -171,43 +172,50 @@ docker compose down
 
 ### Option B: Run without Docker (Local Python)
 
-> Requires Python 3.10+
+> **Important:** Requires **Python 3.10, 3.11, or 3.12** (Python 3.13+ is not supported by TensorFlow 2.17).
 
-**Step 1 — Install backend dependencies:**
-```bash
+**Step 1 — Create and activate a clean Virtual Environment:**
+
+To prevent dependency conflicts with existing Python packages, always use a dedicated virtual environment:
+
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+
+**Step 2 — Install backend dependencies:**
+
+```cmd
+python -m pip install --upgrade pip
 pip install -r backend/requirements.txt
 ```
 
-> First install takes ~5–10 minutes (TensorFlow + MediaPipe are large packages).
+> First install takes ~3–5 minutes to download TensorFlow and MediaPipe.
 
-**Step 2 — Start the backend server:**
+**Step 3 — Start the backend server:**
 
-On Windows:
-```bash
+```cmd
 set PYTHONPATH=.;ml/src
-uvicorn backend.main:app --host 0.0.0.0 --port 8005
+uvicorn backend.main:app --host 127.0.0.1 --port 8005
 ```
 
-On macOS / Linux:
-```bash
-PYTHONPATH=.:ml/src uvicorn backend.main:app --host 0.0.0.0 --port 8005
+When you see `Uvicorn running on http://127.0.0.1:8005`, the backend is ready.
+
+**Step 4 — Open the frontend:**
+
+Keep the backend terminal running. Double-click `frontend/index.html` in File Explorer to open it in Chrome/Edge, or run a local web server from a second terminal:
+
+```cmd
+python -m http.server 3000 --directory frontend
 ```
 
-**Step 3 — Open the frontend:**
-
-Open `frontend/index.html` directly in your browser, **or** serve it with Python:
-```bash
-cd frontend
-python -m http.server 3000
-```
-Then open [http://localhost:3000](http://localhost:3000).
-
-> Backend must be running on port 8005 before using the frontend.
+Then open [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
 ---
 
 ## Project Scope & Boundary Disclaimers (DL-024)
 
 As defined in the course curriculum specification:
+
 * **In Scope:** Classification of discrete dynamic gestures extracted from short clips (3–5 seconds) utilizing spatial hand landmarks and sequence modeling.
 * **Out of Scope:** Continuous unsegmented signing, grammatical inflection modeling, non-manual markers (facial affect), and real-time sentence construction.
