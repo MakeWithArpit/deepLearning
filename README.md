@@ -202,15 +202,7 @@ When you see `Uvicorn running on http://127.0.0.1:8005`, the backend is ready.
 
 **Step 4 — Open the frontend:**
 
-Keep the backend terminal running. Double-click `frontend/index.html` in File Explorer to open it in Chrome/Edge, or run a local web server from a second terminal:
-
-```cmd
-python -m http.server 3000 --directory frontend
-```
-
-Then open [http://127.0.0.1:3000](http://127.0.0.1:3000).
-
----
+Keep the backend terminal running. Double-click `frontend/index.html` in File Explorer to open it in Chrome/Edge.
 
 ## Project Scope & Boundary Disclaimers (DL-024)
 
