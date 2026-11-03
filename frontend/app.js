@@ -38,9 +38,15 @@ const systemStatus = document.getElementById("system-status");
 const systemDot = document.getElementById("system-dot");
 
 let selectedFile = null;
+const isInsideIframe = (window.parent !== window);
 
 // Initial Health Check
 async function pingBackend() {
+  if (isInsideIframe) {
+    systemStatus.textContent = "MODEL: LSTM READY";
+    systemDot.style.backgroundColor = "var(--color-status-success)";
+    return;
+  }
   try {
     const res = await fetch(`${API_BASE}/health`);
     if (res.ok) {
@@ -56,6 +62,47 @@ async function pingBackend() {
   }
 }
 pingBackend();
+
+// Streamlit Component Bridge (Active when hosted on Streamlit Cloud)
+if (isInsideIframe) {
+  window.parent.postMessage({
+    isStreamlitMessage: true,
+    type: "streamlit:componentReady",
+    apiVersion: 1
+  }, "*");
+
+  function notifyHeight() {
+    window.parent.postMessage({
+      isStreamlitMessage: true,
+      type: "streamlit:setFrameHeight",
+      height: Math.max(document.documentElement.scrollHeight, 1000)
+    }, "*");
+  }
+  window.addEventListener("load", notifyHeight);
+  window.addEventListener("resize", notifyHeight);
+  setInterval(notifyHeight, 500);
+
+  window.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "streamlit:render") {
+      const args = event.data.args;
+      if (args && args.prediction) {
+        progressBarFill.style.width = "100%";
+        progressPhase.textContent = "Pipeline complete.";
+        progressPct.textContent = "100%";
+        setTimeout(() => {
+          progressContainer.style.display = "none";
+          if (args.prediction.error) {
+            displayError("Inference Exception", args.prediction.error);
+          } else {
+            renderSuccess(args.prediction);
+          }
+          analyzeBtn.disabled = false;
+          analyzeBtn.innerHTML = '<span class="material-symbols-outlined btn-icon">replay</span> Re-run Inference';
+        }, 300);
+      }
+    }
+  });
+}
 
 // File Selector Handlers
 browseBtn.addEventListener("click", () => fileInput.click());
@@ -154,6 +201,14 @@ function resetStudio() {
   diagnosticChip.textContent = "Awaiting Input";
   diagnosticChip.style.color = "var(--color-outline)";
   diagnosticChip.style.borderColor = "var(--color-outline-variant)";
+
+  if (isInsideIframe) {
+    window.parent.postMessage({
+      isStreamlitMessage: true,
+      type: "streamlit:setComponentValue",
+      value: { action: "reset", timestamp: Date.now() }
+    }, "*");
+  }
 }
 
 async function executeInference(file) {
@@ -172,6 +227,38 @@ async function executeInference(file) {
   progressBarFill.style.width = "35%";
   progressPhase.textContent = "OpenCV: Extracting consecutive temporal frames...";
   progressPct.textContent = "35%";
+
+  // If inside Streamlit Cloud, bridge video through Streamlit component message
+  if (isInsideIframe) {
+    setTimeout(() => {
+      progressBarFill.style.width = "75%";
+      progressPhase.textContent = "MediaPipe & LSTM: Evaluating temporal sliding window...";
+      progressPct.textContent = "75%";
+    }, 400);
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const base64String = e.target.result.split(',')[1];
+      window.parent.postMessage({
+        isStreamlitMessage: true,
+        type: "streamlit:setComponentValue",
+        value: {
+          action: "predict",
+          base64: base64String,
+          filename: file.name,
+          timestamp: Date.now()
+        }
+      }, "*");
+    };
+    reader.onerror = function() {
+      progressContainer.style.display = "none";
+      displayError("File Read Error", "Could not read the uploaded video clip.");
+      analyzeBtn.disabled = false;
+      analyzeBtn.innerHTML = '<span class="material-symbols-outlined btn-icon">replay</span> Re-run Inference';
+    };
+    reader.readAsDataURL(file);
+    return;
+  }
 
   const formData = new FormData();
   formData.append("file", file);
