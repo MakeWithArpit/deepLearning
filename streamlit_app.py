@@ -16,24 +16,38 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Strip all default Streamlit chrome, paddings, headers and footers
+# Strip all default Streamlit chrome, decorations, headers and footers
 st.markdown("""
 <style>
-#MainMenu, header, footer, .stDeployButton, .stAppDeployButton {
-    display: none !important;
-}
+/* Remove Streamlit decoration bar, header, toolbar, and footer */
+[data-testid="stDecoration"],
+[data-testid="stHeader"],
+header,
+footer,
+#MainMenu,
+.stDeployButton,
+.stAppDeployButton,
 div[data-testid="stToolbar"] {
     display: none !important;
+    height: 0px !important;
+    min-height: 0px !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
-.block-container {
+
+html, body, .stApp, .stAppViewContainer, .stMain, .block-container, [data-testid="stAppViewBlockContainer"] {
+    background-color: #f9f9ff !important;
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
 }
+
 iframe {
     width: 100% !important;
     border: none !important;
     display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 </style>
 """, unsafe_allow_html=True)
