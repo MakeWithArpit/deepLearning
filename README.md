@@ -88,9 +88,11 @@ Visual confusion matrix and training curves are stored under the [`report/`](rep
 ## Prerequisites
 
 ### For Docker Method
+
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 
 ### For Local Python Method
+
 - Python 3.10, 3.11, or 3.12 (TensorFlow 2.17 does not support Python 3.13+)
 - pip
 
@@ -203,6 +205,21 @@ When you see `Uvicorn running on http://127.0.0.1:8005`, the backend is ready.
 **Step 4 — Open the frontend:**
 
 Keep the backend terminal running. Double-click `frontend/index.html` in File Explorer to open it in Chrome/Edge.
+
+---
+
+### Option C: Free Cloud Deployment (Streamlit Community Cloud)
+
+Deploy the project live online with a permanent public URL for free:
+
+1. Sign in to [share.streamlit.io](https://share.streamlit.io/) with your GitHub account.
+2. Click **"New app"**, select your repository (`deepLearning`) and branch (`main`).
+3. Set **Main file path** to: `streamlit_app.py`
+4. Click **"Deploy!"**
+
+Streamlit Cloud automatically reads `requirements.txt` and `packages.txt`, generating your live shareable URL.
+
+---
 
 ## Project Scope & Boundary Disclaimers (DL-024)
 
